@@ -23,10 +23,10 @@ pass `--all` to watch them too.
 
 ## flags
 
-- `--clear` — clear the screen between runs
-- `--debounce SEC` — wait this long after a change before rerunning (default 0.5)
-- `--interval SEC` — seconds between change checks (default 1.0)
-- `--all` — also watch hidden files and dirs
+- `--clear` - clear the screen between runs
+- `--debounce SEC` - wait this long after a change before rerunning (default 0.5)
+- `--interval SEC` - seconds between change checks (default 1.0)
+- `--all` - also watch hidden files and dirs
 
 ## notes
 
