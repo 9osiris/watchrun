@@ -21,12 +21,20 @@ runs the command once at startup, then watches. ctrl-c to stop.
 hidden files and dirs (anything starting with `.`) are ignored by default;
 pass `--all` to watch them too.
 
+skip noisy paths with `--ignore` (repeatable, glob patterns):
+
+```bash
+# don't rerun when logs change or anything under build/ moves
+python watchrun.py --ignore "*.log" --ignore "build/*" src -- pytest
+```
+
 ## flags
 
 - `--clear` - clear the screen between runs
 - `--debounce SEC` - wait this long after a change before rerunning (default 0.5)
 - `--interval SEC` - seconds between change checks (default 1.0)
 - `--all` - also watch hidden files and dirs
+- `--ignore GLOB` - never watch matching paths (repeatable)
 
 ## notes
 
