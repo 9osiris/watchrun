@@ -14,6 +14,12 @@ python watchrun.py docs -- make site
 
 # clear the screen between runs so output doesn't pile up
 python watchrun.py --clear src -- python main.py
+
+# run once at startup and exit, don't watch
+python watchrun.py --once src -- pytest
+
+# stop watching the moment a run fails, exit with its code
+python watchrun.py --fail-fast src -- pytest
 ```
 
 runs the command once at startup, then watches. ctrl-c to stop.
@@ -35,6 +41,8 @@ python watchrun.py --ignore "*.log" --ignore "build/*" src -- pytest
 - `--interval SEC` - seconds between change checks (default 1.0)
 - `--all` - also watch hidden files and dirs
 - `--ignore GLOB` - never watch matching paths (repeatable)
+- `--once` - run once at startup and exit, don't watch
+- `--fail-fast` - stop watching after a failing run, exit with its code
 
 ## notes
 

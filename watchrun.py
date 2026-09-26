@@ -56,7 +56,7 @@ def run(cmd, clear):
         os.system("clear")
     print(f"$ {' '.join(cmd)}", flush=True)
     try:
-        subprocess.run(cmd)
+        return subprocess.run(cmd).returncode
     except FileNotFoundError:
         print(f"watchrun: {cmd[0]}: command not found", file=sys.stderr)
         sys.exit(127)
@@ -77,6 +77,10 @@ def main():
                    help="watch hidden files and dirs too (skipped by default)")
     p.add_argument("--ignore", action="append", default=[], metavar="GLOB",
                    help="never watch paths matching glob, repeatable")
+    p.add_argument("--once", action="store_true",
+                   help="run the command once at startup and exit, don't watch")
+    p.add_argument("--fail-fast", action="store_true",
+                   help="stop watching after a failing run, exit with its code")
 
     # everything after -- is the command, parsed by hand so commands
     # starting with dashes don't confuse argparse
@@ -92,7 +96,10 @@ def main():
 
     ignored = make_ignorer(args.ignore)
     prev = snapshot(args.paths, args.all, ignored)
-    run(cmd, args.clear)
+    rc = run(cmd, args.clear)
+    if args.once or (args.fail_fast and rc != 0):
+        # once: never watch; fail-fast: a failing first run stops us too
+        sys.exit(rc)
     try:
         while True:
             time.sleep(args.interval)
@@ -106,7 +113,9 @@ def main():
                         break
                     cur = new
                 prev = cur
-                run(cmd, args.clear)
+                rc = run(cmd, args.clear)
+                if args.fail_fast and rc != 0:
+                    sys.exit(rc)
     except KeyboardInterrupt:
         pass
 
